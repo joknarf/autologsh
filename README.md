@@ -7,13 +7,14 @@ Manage logrotate of log file
 ## usage 
 in a bash script, just put :
 ```
-logfile=<pathtologfile> [maxsize=<maxsize>] [nrotate=<nrotate>] source <path>/autologsh
+[logfile=<pathtologfile>] [maxsize=<maxsize>] [nrotate=<nrotate>] [logtformat=<timeformat>] source <path>/autologsh
 ```
 default values:
 ```
-<pathtologfile> ~/.autolog/log_<tty>
-<maxsize> 5M
-<nrotate> 4
+<pathtologfile> ~/.autolog/<callingscript>.log
+<maxsize>       5M
+<nrotate>       4
+<timeformat>    [%Y-%m-%d %H:%M:%S]
 ```
 the log file will be automatically rotated when exceeding `maxsize`, keeping `nrotate` compressed history files.
 
