@@ -8,8 +8,7 @@
 # Author: Franck Jouvanceau
 
 log_vars() {
-    local tty=$(tty) tty=${tty//\/_}
-    : ${logfile:=~/.autolog/log$tty}
+    : ${logfile:=~/.autolog/"${0##*/}".log}
     logdir="${logfile%/*}"
 }
 
@@ -31,13 +30,13 @@ EOF
 }
 
 do_log() {
-    local logdir logfile="$logfile" logtformat="${logtformat:-[%Y-%m-%d %H:%M:%S]}"
+    local logdir logfile="$logfile" timeformat="${timeformat:-[%Y-%m-%d %H:%M:%S]}"
     log_vars
     mkdir -p "$logdir" || return 1
     touch "$logfile" || return 1
     log_rotate
     echo '---------------------------------' >>"$logfile"
-    exec > >(awk '{print strftime(tf), $0; fflush() }' tf="$logtformat" |tee -a "$logfile") 2>&1
+    exec > >(awk '{print strftime(tf), $0; fflush() }' tf="$timeformat" |tee -a "$logfile") 2>&1
 }
 
 log() {
