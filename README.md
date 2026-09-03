@@ -7,6 +7,8 @@ Manage logrotate of log file
 ## usage 
 in a bash script, just put :
 ```
+[autologsh variables] source <path>/autologsh
+possible variables (can also be declared before sourcing) :
 [logfile=<pathtologfile>] [maxsize=<maxsize>] [nrotate=<nrotate>] [timeformat=<timeformat>] source <path>/autologsh
 ```
 default values:
