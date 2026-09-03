@@ -1,6 +1,6 @@
 #!/bin/bash
 logfile=/tmp/.log/test.log
-maxsize=2K nrotate=3 . ./autologsh
+maxsize=2K nrotate=3 source ./autologsh
 
 echo "This is a stdout test"
 echo "This is a stderr test" >&2
