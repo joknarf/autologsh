@@ -41,7 +41,7 @@ do_log() {
 }
 
 log() {
-    [ "$log_format" ] || local log_format='%-5s %-10s %s\n'
+    local log_format="${log_format:-%-5s %-10s %s\n}"
     printf "$log_format" "$@"
 }
 
