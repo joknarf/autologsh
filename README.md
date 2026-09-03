@@ -4,7 +4,7 @@ Simple bash lib to source in a script to automatically have stdout/stdin in a lo
 
 Manage logrotate of log file
 
-# usage 
+## usage 
 in a bash script, just put :
 ```
 logfile=<pathtologfile> [maxsize=<maxsize>] [nrotate=<nrotate>] . <path>/autologsh
@@ -16,7 +16,7 @@ default values:
 <nrotate> 4
 ```
 
-# example
+## example
 
 ```shell
 #!/bin/bash
