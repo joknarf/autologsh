@@ -1,6 +1,6 @@
 # autologsh
 
-Simple bash lib to source in a script to automatically have stdout/stdin in a log file with timestamp and having it displayed at script execution.
+Simple bash lib to source in a script to automatically have stdout/stderr in a log file with timestamp and having it displayed at script execution.
 
 Manage logrotate of log file
 
