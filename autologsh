@@ -34,6 +34,7 @@ do_log() {
     local logdir logfile="$logfile"
     log_vars
     mkdir -p "$logdir" || return 1
+    touch "$logfile" || return 1
     log_rotate
     echo '---------------------------------' >>"$logfile"
     exec > >(awk '{print strftime("[%Y-%m-%d %H:%M:%S]"), $0; fflush() }' |tee -a "$logfile") 2>&1
