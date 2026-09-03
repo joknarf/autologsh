@@ -31,18 +31,18 @@ EOF
 }
 
 do_log() {
-    local logdir logfile="$logfile"
+    local logdir logfile="$logfile" logtformat="${logtformat:-[%Y-%m-%d %H:%M:%S]}"
     log_vars
     mkdir -p "$logdir" || return 1
     touch "$logfile" || return 1
     log_rotate
     echo '---------------------------------' >>"$logfile"
-    exec > >(awk '{print strftime("[%Y-%m-%d %H:%M:%S]"), $0; fflush() }' |tee -a "$logfile") 2>&1
+    exec > >(awk '{print strftime(tf), $0; fflush() }' tf="$logtformat" |tee -a "$logfile") 2>&1
 }
 
 log() {
-    local log_format="${log_format:-%-5s %-10s %s\n}"
-    printf "$log_format" "$@"
+    local logformat="${logformat:-%-5s %-10s %s\n}"
+    printf "$logformat" "$@"
 }
 
 do_log "$@"
