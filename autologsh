@@ -1,0 +1,47 @@
+### Timestamped logs/rotate
+# logfile=<logfile> [maxsize<maxsize>] [nrotate=<nrotate>] source <path>/autolog.sh
+# ex:
+#   logfile=~/log/app.log maxsize=5M nrotate=4 source ./autologsh
+#
+# defaults: <logfile> ~/.autolog/log_<tty> <maxsize>: 5M <nrotate>: 4
+#
+# Author: Franck Jouvanceau
+
+log_vars() {
+    local tty=$(tty) tty=${tty//\/_}
+    : ${logfile:=~/.autolog/log$tty}
+    logdir="${logfile%/*}"
+}
+
+log_rotate() {
+    local logdir logfile="$logfile"
+    local maxsize="${maxsize:-5M}"
+    local nrotate="${nrotate:-4}"
+    log_vars
+    local logconf="$logdir/.logrotate"
+    cat - <<EOF >"$logconf"
+$logfile {
+    maxsize $maxsize
+    rotate $nrotate
+    compress
+    copytruncate
+}
+EOF
+    logrotate --state /dev/null "$logconf"
+}
+
+do_log() {
+    local logdir logfile="$logfile"
+    log_vars
+    mkdir -p "$logdir" || return 1
+    log_rotate
+    echo '---------------------------------' >>"$logfile"
+    exec > >(awk '{print strftime("[%Y-%m-%d %H:%M:%S]"), $0; fflush() }' |tee -a "$logfile") 2>&1
+}
+
+log() {
+    [ "$log_format" ] || local log_format='%-5s %-10s %s\n'
+    printf "$log_format" "$@"
+}
+
+do_log "$@"

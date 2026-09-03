@@ -1,0 +1,13 @@
+#!/bin/bash
+logfile=/tmp/.log/test.log
+set >/tmp/set1
+maxsize=2K nrotate=3 . ./autologsh
+set >/tmp/set2
+
+echo "This is a stdout test"
+echo "This is a stderr test" >&2
+log INFO ${0##*/} "Message to log"
+log WARN ${0##*/} "Warn Message to log"
+log ERROR ${0##*/} "Error Message to log"
+
+maxsize=1K log_rotate
