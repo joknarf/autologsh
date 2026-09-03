@@ -7,7 +7,7 @@ Manage logrotate of log file
 ## usage 
 in a bash script, just put :
 ```
-logfile=<pathtologfile> [maxsize=<maxsize>] [nrotate=<nrotate>] . <path>/autologsh
+logfile=<pathtologfile> [maxsize=<maxsize>] [nrotate=<nrotate>] source <path>/autologsh
 ```
 default values:
 ```
