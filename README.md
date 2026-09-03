@@ -15,6 +15,12 @@ default values:
 <maxsize> 5M
 <nrotate> 4
 ```
+the log file will be automatically rotated when exceeding `maxsize`, keeping `nrotate` compressed history files.
+
+## pre-requisites
+
+* logrotate command
+* awk command with strftime() function (gawk/mawk)
 
 ## example
 
@@ -43,3 +49,4 @@ each execution also logged in `~/log/app.log`
 [2026-09-03 23:43:19] INFO  myscript   log function to easy format log with level description message
 [2026-09-03 23:43:19] ERROR myscript   This is an Error message
 ```
+
