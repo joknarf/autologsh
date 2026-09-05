@@ -19,7 +19,7 @@ as a command:
 ```
 [autologsh variables] autologsh [--nolog] <command> [<args>]
 or as piped output logging:
-command | autologsh [--nolog] cat
+command | autologsh [--nolog] -
 ```
 `--nolog` parameter will just display timestamped output without logging into a log file (like `ts` linux command)
 
