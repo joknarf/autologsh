@@ -1,11 +1,11 @@
 # autologsh
 
-Simple shell lib to source in a shell script (bash/zsh/ksh) to automatically have timestamped stdout/stderr output and also saved in a log file at script execution.  
-Manage logrotate of log file.
+Simple shell script/lib (bash/zsh/ksh) to add timestamp to output of command and also save in a log file managing directly logrotate of log file.
+Used as lib, source in a shell script to automatically have timestamped stdout/stderr output and also saved in a log file at script execution.
 
 ## features
 
-Just sourcing `autologsh` in as shell script provides:
+Using `autologsh <command> [<args>]`, or ust sourcing `autologsh` in as shell script provides:
 
 * timestamped shell script stdout/stderr output (displayed on stdout) 
 * timestamped shell script stdout/stderr to log file
@@ -13,29 +13,40 @@ Just sourcing `autologsh` in as shell script provides:
 * customizable timestamp format (`timeformat`)
 * `log` function to format message with level/facility/message
 * compatible bash/zsh/ksh
-* autolog script can be used to timestamp/log any command output (`command |autolog`)
 
 ## usage 
-in a bash script, just put :
+as a command:
+```
+autologsh [--nolog] <command> [<args>]
+or as piped output logging:
+command | autologsh [--nolog] cat
+```
+`--nolog` parameter will just display timestamped output without logging into a log file (like `ts` linux command)
+
+as a lib, in a bash script, just put :
 ```
 [autologsh variables] source <path>/autologsh [--nolog]
-possible variables (can also be declared before sourcing) :
-[logfile=<pathtologfile>] [maxsize=<maxsize>] [nrotate=<nrotate>] [timeformat=<timeformat>] source <path>/autologsh
 ```
-`--nolog` parameter will just display timestamped output without logging into a log file
-
-default values:
+variables default values:
 ```
-<pathtologfile> ~/.autolog/<callingscript>.log
-<maxsize>       5M
-<nrotate>       4
-<timeformat>    [%Y-%m-%d %H:%M:%S]
+logfile=<pathtologfile>    ~/.autolog/<callingscript>.log
+maxsier=<maxsize>          5M
+norotate=<nrotate>         4
+timeformat=<timeformat>    [%Y-%m-%d %H:%M:%S]
 ```
 the log file will be automatically rotated when exceeding `maxsize`, keeping `nrotate` compressed history files.
 
-the `autolog` script can be used to timestamp+log directly a command:
+
+## pre-requisites
+
+* logrotate command
+* awk command with strftime()/fflush() functions (gawk/mawk)
+
+## example
+
+the `autologsh` script can be used to timestamp+log directly a command:
 ```
-ping -c 3 172.26.48.140 | ~autolog/autolog
+autologsh ping -c 3 172.26.48.140
 [2026-09-05 09:12:43] PING 172.26.48.140 (172.26.48.140) 56(84) bytes of data.
 [2026-09-05 09:12:43] 64 bytes from 172.26.48.140: icmp_seq=1 ttl=64 time=0.268 ms
 [2026-09-05 09:12:44] 64 bytes from 172.26.48.140: icmp_seq=2 ttl=64 time=0.467 ms
@@ -45,15 +56,9 @@ ping -c 3 172.26.48.140 | ~autolog/autolog
 [2026-09-05 09:12:45] 3 packets transmitted, 3 received, 0% packet loss, time 2036ms
 [2026-09-05 09:12:45] rtt min/avg/max/mdev = 0.268/0.382/0.467/0.084 ms
 ```
-log saved in `~/.autolog/autolog.log`, use `cmd |logfile=<logfile> autolog` to change log file destination.  
-use `autolog --nolog` to have just timestamped output without logging into a file. (like `ts` command)
+log saved in `~/.autolog/autolog.log`, use `cmd |logfile=<logfile> autologsh` to change log file destination.  
+use `autologsh --nolog <command>` to have just timestamped output without logging into a file. (like `ts` command)
 
-## pre-requisites
-
-* logrotate command
-* awk command with strftime() function (gawk/mawk)
-
-## example
 
 ```shell
 #!/bin/bash
