@@ -44,7 +44,8 @@ ping -c 3 172.26.48.140 | ~autolog/autolog
 [2026-09-05 09:12:45] 3 packets transmitted, 3 received, 0% packet loss, time 2036ms
 [2026-09-05 09:12:45] rtt min/avg/max/mdev = 0.268/0.382/0.467/0.084 ms
 ```
-log saved in `~/.autolog/autolog.log`, use `cmd |logfile=<logfile> autolog` to change log file destination.
+log saved in `~/.autolog/autolog.log`, use `cmd |logfile=<logfile> autolog` to change log file destination.  
+use `autolog --nolog` to have just timestamped output without logging into a file. (like `ts` command)
 
 ## pre-requisites
 
