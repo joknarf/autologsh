@@ -19,7 +19,7 @@ _log_vars() {
 }
 
 function log_rotate {
-    typeset logdir logfile="$logfile"
+    typeset logdir logfile="${1:-$logfile}"
     typeset maxsize="${maxsize:-5M}"
     typeset nrotate="${nrotate:-4}"
     _log_vars
@@ -53,7 +53,7 @@ function do_log {
         _log_vars
         mkdir -p "$logdir" || return 1
         touch "$logfile" || return 1
-        log_rotate
+        log_rotate "$logfile"
         echo '---------------------------------' >>"$logfile"
     }
     [ "$1" = "-" ] && { _log_out; return; }
