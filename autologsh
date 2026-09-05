@@ -1,13 +1,18 @@
 ### Timestamped logs/rotate
-# logfile=<logfile> [maxsize<maxsize>] [nrotate=<nrotate>] source <path>/autolog.sh
-# ex:
-#   logfile=~/log/app.log maxsize=5M nrotate=4 source ./autologsh
-#
-# defaults: <logfile> ~/.autolog/log_<tty> <maxsize>: 5M <nrotate>: 4
 #
 # Author: Franck Jouvanceau
 
-log_vars() {
+_log_help() {
+    printf '%s\n' '
+usage: [<vars>] autologsh [--nolog] <command>|- [<args>]
+with vars default:
+  logfile=~/.autolog/<command>.log or autologsh.log for -
+  maxsize=5M nrotate=4
+  timeformat=[%Y-%m-%d %H:%M:%S]
+'
+}
+
+_log_vars() {
     : ${logfile:=~/.autolog/"${0##*/}".log}
     logdir="${logfile%/*}"
 }
@@ -16,7 +21,7 @@ function log_rotate {
     typeset logdir logfile="$logfile"
     typeset maxsize="${maxsize:-5M}"
     typeset nrotate="${nrotate:-4}"
-    log_vars
+    _log_vars
     typeset logconf="$logdir/.logrotate"
     cat - <<EOF >"$logconf"
 $logfile {
@@ -43,14 +48,15 @@ function do_log {
     typeset logdir logfile="$logfile" timeformat="${timeformat:-[%Y-%m-%d %H:%M:%S]}" cmd log=1
     [ "$1" = --nolog ] && log=1 && shift
     ((log)) && {
-        log_vars
+        [ "$1" ] && [ "$1" != '-' ] && : ${logfile:=~/.autolog/"$1".log}
+        _log_vars
         mkdir -p "$logdir" || return 1
         touch "$logfile" || return 1
         log_rotate
         echo '---------------------------------' >>"$logfile"
     }
     [ "$1" = "-" ] && { _log_out; return; }
-    if [ "$*" ] ;then "$@" 2>&1 | _log_out
+    if [ "$1" ] ;then "$@" 2>&1 | _log_out
     else exec > >(_log_out) 2>&1
     fi
 }
@@ -60,4 +66,4 @@ function log {
     printf "$logformat" "$@"
 }
 
-do_log "$@"
+[[ "$1" = -*h* ]] && _log_help || do_log "$@"
