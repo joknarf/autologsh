@@ -29,21 +29,30 @@ EOF
     logrotate --state "$logconf.s" "$logconf"
 }
 
+_log_ts() {
+    awk '{print strftime(tf), $0; fflush() }' tf="$timeformat"
+}
+
+_log_out() {
+    if ((log));then _log_ts |tee -a "$logfile" 
+    else _log_ts
+    fi
+}
+
 function do_log {
-    typeset logdir logfile="$logfile" timeformat="${timeformat:-[%Y-%m-%d %H:%M:%S]}"
-    [ "$1" = --nolog ] && {
-       shift
-       exec > >(awk '{print strftime(tf), $0; fflush() }' tf="$timeformat") 2>&1
-       "$@"
-       return
+    typeset logdir logfile="$logfile" timeformat="${timeformat:-[%Y-%m-%d %H:%M:%S]}" cmd log=1
+    [ "$1" = --nolog ] && log=1 && shift
+    ((log)) && {
+        log_vars
+        mkdir -p "$logdir" || return 1
+        touch "$logfile" || return 1
+        log_rotate
+        echo '---------------------------------' >>"$logfile"
     }
-    log_vars
-    mkdir -p "$logdir" || return 1
-    touch "$logfile" || return 1
-    log_rotate
-    echo '---------------------------------' >>"$logfile"
-    exec > >(awk '{print strftime(tf), $0; fflush() }' tf="$timeformat" |tee -a "$logfile") 2>&1
-    "$@"
+    [ "$1" = "-" ] && { _log_out; return; }
+    if [ "$*" ] ;then "$@" 2>&1 | _log_out
+    else exec > >(_log_out) 2>&1
+    fi
 }
 
 function log {
