@@ -13,6 +13,7 @@ Just sourcing `autologsh` in as shell script provides:
 * customizable timestamp format (`timeformat`)
 * `log` function to format message with level/facility/message
 * compatible bash/zsh/ksh
+* autolog script can be used to timestamp/log any command output (`command |autolog`)
 
 ## usage 
 in a bash script, just put :
