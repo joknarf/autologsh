@@ -1,6 +1,6 @@
 #!/bin/bash
 logfile=/tmp/.log/test.log
-maxsize=2K nrotate=3 source ./autologsh
+maxsize=2k nrotate=3 source ./autologsh
 
 echo "This is a stdout test"
 echo "This is a stderr test" >&2
@@ -8,4 +8,4 @@ log INFO ${0##*/} "Message to log"
 log WARN ${0##*/} "Warn Message to log"
 log ERROR ${0##*/} "Error Message to log"
 
-maxsize=1K log_rotate
+maxsize=1k log_rotate
