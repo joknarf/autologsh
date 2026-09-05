@@ -31,6 +31,10 @@ EOF
 
 function do_log {
     typeset logdir logfile="$logfile" timeformat="${timeformat:-[%Y-%m-%d %H:%M:%S]}"
+    [ "$1" = --nolog ] && {
+       exec > >(awk '{print strftime(tf), $0; fflush() }' tf="$timeformat") 2>&1
+       return
+    }
     log_vars
     mkdir -p "$logdir" || return 1
     touch "$logfile" || return 1
