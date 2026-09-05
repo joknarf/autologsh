@@ -29,7 +29,7 @@ as a lib, in a bash script, just put :
 ```
 variables default values:
 ```
-logfile=<pathtologfile>    ~/.autolog/<callingscript>.log
+logfile=<pathtologfile>    ~/.autolog/<callingscript|command>.log
 maxsize=<maxsize>          5M
 norotate=<nrotate>         4
 timeformat=<timeformat>    [%Y-%m-%d %H:%M:%S]
