@@ -5,7 +5,7 @@ Used as lib, source in a shell script to automatically have timestamped stdout/s
 
 ## features
 
-Using `autologsh <command> [<args>]`, or ust sourcing `autologsh` in as shell script provides:
+Using `autologsh <command> [<args>]`, or just sourcing `autologsh` in as shell script provides:
 
 * timestamped shell script stdout/stderr output (displayed on stdout) 
 * timestamped shell script stdout/stderr to log file
