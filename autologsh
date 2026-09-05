@@ -32,7 +32,9 @@ EOF
 function do_log {
     typeset logdir logfile="$logfile" timeformat="${timeformat:-[%Y-%m-%d %H:%M:%S]}"
     [ "$1" = --nolog ] && {
+       shift
        exec > >(awk '{print strftime(tf), $0; fflush() }' tf="$timeformat") 2>&1
+       "$@"
        return
     }
     log_vars
@@ -41,6 +43,7 @@ function do_log {
     log_rotate
     echo '---------------------------------' >>"$logfile"
     exec > >(awk '{print strftime(tf), $0; fflush() }' tf="$timeformat" |tee -a "$logfile") 2>&1
+    "$@"
 }
 
 function log {
