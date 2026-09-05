@@ -1,8 +1,18 @@
 # autologsh
 
-Simple bash lib to source in a script to automatically have stdout/stderr in a log file with timestamp and having it displayed at script execution.
+Simple shell lib to source in a shell script (bash/zsh/ksh) to automatically have timestamped stdout/stderr output and also saved in a log file at script execution.  
+Manage logrotate of log file.
 
-Manage logrotate of log file
+## features
+
+Just sourcing `autologsh` in as shell script provides:
+
+* timestamped shell script stdout/stderr output (displayed on stdout) 
+* timestamped shell script stdout/stderr to log file
+* logrotate log file on `maxsize` keeping `nrotate` compressed files (customizable)
+* customizable timestamp format (`timeformat`)
+* `log` function to format message with level/facility/message
+* compatible bash/zsh/ksh
 
 ## usage 
 in a bash script, just put :
@@ -19,6 +29,20 @@ default values:
 <timeformat>    [%Y-%m-%d %H:%M:%S]
 ```
 the log file will be automatically rotated when exceeding `maxsize`, keeping `nrotate` compressed history files.
+
+the `autolog` script can be used to timestamp+log directly a command:
+```
+ping -c 3 172.26.48.140 | ~autolog/autolog
+[2026-09-05 09:12:43] PING 172.26.48.140 (172.26.48.140) 56(84) bytes of data.
+[2026-09-05 09:12:43] 64 bytes from 172.26.48.140: icmp_seq=1 ttl=64 time=0.268 ms
+[2026-09-05 09:12:44] 64 bytes from 172.26.48.140: icmp_seq=2 ttl=64 time=0.467 ms
+[2026-09-05 09:12:45] 64 bytes from 172.26.48.140: icmp_seq=3 ttl=64 time=0.413 ms
+[2026-09-05 09:12:45]
+[2026-09-05 09:12:45] --- 172.26.48.140 ping statistics ---
+[2026-09-05 09:12:45] 3 packets transmitted, 3 received, 0% packet loss, time 2036ms
+[2026-09-05 09:12:45] rtt min/avg/max/mdev = 0.268/0.382/0.467/0.084 ms
+```
+log saved in `~/.autolog/autolog.log`, use `cmd |logfile=<logfile> autolog` to change log file destination.
 
 ## pre-requisites
 
