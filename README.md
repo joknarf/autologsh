@@ -59,7 +59,7 @@ autologsh ping -c 3 172.26.48.140
 log saved in `~/.autolog/ping.log`, use `logfile=<logfile> autologsh <command>` to change log file destination.  
 use `autologsh --nolog <command>` to have just timestamped output without logging into a file. (like `ts` command)
 
-
+Using autologsh a lib in a shell script:
 ```shell
 #!/bin/bash
 logfile=~/log/app.log maxsize=5M nrotate=4 source ~/autologsh/autologsh
