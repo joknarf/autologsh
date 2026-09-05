@@ -12,12 +12,12 @@ log_vars() {
     logdir="${logfile%/*}"
 }
 
-log_rotate() {
-    local logdir logfile="$logfile"
-    local maxsize="${maxsize:-5M}"
-    local nrotate="${nrotate:-4}"
+function log_rotate {
+    typeset logdir logfile="$logfile"
+    typeset maxsize="${maxsize:-5M}"
+    typeset nrotate="${nrotate:-4}"
     log_vars
-    local logconf="$logdir/.logrotate"
+    typeset logconf="$logdir/.logrotate"
     cat - <<EOF >"$logconf"
 $logfile {
     maxsize $maxsize
@@ -26,11 +26,11 @@ $logfile {
     copytruncate
 }
 EOF
-    logrotate --state /dev/null "$logconf"
+    logrotate --state "$logconf.s" "$logconf"
 }
 
-do_log() {
-    local logdir logfile="$logfile" timeformat="${timeformat:-[%Y-%m-%d %H:%M:%S]}"
+function do_log {
+    typeset logdir logfile="$logfile" timeformat="${timeformat:-[%Y-%m-%d %H:%M:%S]}"
     log_vars
     mkdir -p "$logdir" || return 1
     touch "$logfile" || return 1
@@ -39,8 +39,8 @@ do_log() {
     exec > >(awk '{print strftime(tf), $0; fflush() }' tf="$timeformat" |tee -a "$logfile") 2>&1
 }
 
-log() {
-    local logformat="${logformat:-%-5s %-10s %s\n}"
+function log {
+    typeset logformat="${logformat:-%-5s %-10s %s\n}"
     printf "$logformat" "$@"
 }
 
