@@ -7,8 +7,8 @@ Used as lib, source in a shell script to automatically have timestamped stdout/s
 
 Using `autologsh <command> [<args>]`, or just sourcing `autologsh` in as shell script provides:
 
-* timestamped shell script stdout/stderr output (displayed on stdout) 
-* timestamped shell script stdout/stderr to log file
+* timestamped command/shell script output (displayed on stdout) 
+* timestamped command/shell script to log file
 * logrotate log file on `maxsize` keeping `nrotate` compressed files (customizable)
 * customizable timestamp format (`timeformat`)
 * `log` function to format message with level/facility/message
@@ -17,7 +17,7 @@ Using `autologsh <command> [<args>]`, or just sourcing `autologsh` in as shell s
 ## usage 
 as a command:
 ```
-autologsh [--nolog] <command> [<args>]
+[autologsh variables] autologsh [--nolog] <command> [<args>]
 or as piped output logging:
 command | autologsh [--nolog] cat
 ```
@@ -56,7 +56,7 @@ autologsh ping -c 3 172.26.48.140
 [2026-09-05 09:12:45] 3 packets transmitted, 3 received, 0% packet loss, time 2036ms
 [2026-09-05 09:12:45] rtt min/avg/max/mdev = 0.268/0.382/0.467/0.084 ms
 ```
-log saved in `~/.autolog/autolog.log`, use `cmd |logfile=<logfile> autologsh` to change log file destination.  
+log saved in `~/.autolog/autolog.log`, use `logfile=<logfile> autologsh <command>` to change log file destination.  
 use `autologsh --nolog <command>` to have just timestamped output without logging into a file. (like `ts` command)
 
 
