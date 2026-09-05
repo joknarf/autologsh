@@ -17,10 +17,12 @@ Just sourcing `autologsh` in as shell script provides:
 ## usage 
 in a bash script, just put :
 ```
-[autologsh variables] source <path>/autologsh
+[autologsh variables] source <path>/autologsh [--nolog]
 possible variables (can also be declared before sourcing) :
 [logfile=<pathtologfile>] [maxsize=<maxsize>] [nrotate=<nrotate>] [timeformat=<timeformat>] source <path>/autologsh
 ```
+`--nolog` parameter will just display timestamped output without logging into a log file
+
 default values:
 ```
 <pathtologfile> ~/.autolog/<callingscript>.log
