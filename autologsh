@@ -23,7 +23,7 @@ $logfile {
     maxsize $maxsize
     rotate $nrotate
     compress
-    copytruncate
+    create
 }
 EOF
     logrotate --state "$logconf.s" "$logconf"
