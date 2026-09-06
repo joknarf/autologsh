@@ -14,7 +14,6 @@ with vars default:
 }
 
 _log_rotate() {
-    typeset logconf="$logdir/.logrotate"
     cat - <<EOF >"$logconf"
 $logfile {
     maxsize $maxsize
@@ -37,10 +36,9 @@ _log_ts() {
 
 _log_ts_rot() {
     typeset size=$(stat -c '%s' "$logfile")
-    awk '
-        { o=strftime(tf)" "$0;print o;fflush();s+=length(o)+1 }
-        s>m{s=0;system("logrotate -s "lc".s "lc" &")}
-    ' tf="$timeformat" lc="$logdir/.logrotate" s=$size m=$maxs
+    awk '{ o=strftime(tf)" "$0;print o;fflush();s+=length(o)+1 }
+         s>m{s=0;system("logrotate -s "lc".s "lc" &")}
+    ' tf="$timeformat" lc="$logconf" s=$size m=$maxs
 }
 
 _log_out() {
@@ -51,16 +49,17 @@ _log_out() {
 
 function do_log {
     typeset logdir logfile="$logfile" timeformat="${timeformat:-[%Y-%m-%d %H:%M:%S]}" cmd log=1
-    typeset maxsize="${maxsize:-5M}" maxs
-    typeset nrotate="${nrotate:-4}"
-    [ "$1" = --nolog ] && log=1 && shift
+    typeset maxsize="${maxsize:-5M}" maxs nrotate="${nrotate:-4}" logconf
+    [ "$1" = --nolog ] && log=0 && shift
     ((log)) && {
         [ "$1" ] && [ "$1" != '-' ] && : ${logfile:=~/.autolog/"$1".log}
         : ${logfile:=~/.autolog/"${0##*/}".log}
+        touch "$logfile" || return 1
+        logfile=$(realpath "$logfile")
         logdir="${logfile%/*}"
         mkdir -p "$logdir" || return 1
-        touch "$logfile" || return 1
-        _log_rotate "$logfile"
+        logconf="${logdir}/.${logfile##*/}.conf"
+        _log_rotate
         echo '---------------------------------' >>"$logfile"
     }
     [ "$1" = "-" ] && { _log_out; return; }
