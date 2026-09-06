@@ -42,7 +42,11 @@ _log_ts_rot() {
 }
 
 _log_out() {
-    if ((log));then _log_ts_rot |tee -a "$logfile" 
+    if ((log));then
+        if [ -t 1 ]
+        then _log_ts_rot |tee -a "$logfile" 
+        else _log_ts_rot >>"$logfile"
+        fi
     else _log_ts
     fi
 }
@@ -63,7 +67,7 @@ function do_log {
         echo '---------------------------------' >>"$logfile"
     }
     [ "$1" = "-" ] && { _log_out; return; }
-    if [ "$1" ] ;then "$@" 2>&1 | _log_out
+    if [ "$1" ] ;then _log_out < <("$@" 2>&1)
     else exec > >(_log_out) 2>&1
     fi
 }
