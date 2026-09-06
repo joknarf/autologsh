@@ -61,6 +61,7 @@ function do_log {
         [ "$1" ] && [ "$1" != '-' ] && : ${logfile:=~/.autolog/"$1".log}
         : ${logfile:=~/.autolog/"${0##*/}".log}
         logdir="${logfile%/*}"
+        [ "$logdir" = "$logfile" ] && logdir='.'
         mkdir -p "$logdir" || return 1
         touch "$logfile" || return 1
         [[ $logfile = /* ]] || logfile="$(cd $logdir;pwd -P)/${logfile##*/}"
