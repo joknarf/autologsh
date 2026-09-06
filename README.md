@@ -17,11 +17,12 @@ Using `autologsh <command> [<args>]`, or just sourcing `autologsh` in as shell s
 ## usage 
 as a command:
 ```
-[autologsh variables] autologsh [--nolog] <command> [<args>]
+[autologsh variables] autologsh [--nolog|--noout] <command> [<args>]
 or as piped output logging:
-command | autologsh [--nolog] -
+command | autologsh [--nolog|--noout] -
 ```
 `--nolog` parameter will just display timestamped output without logging into a log file (like `ts` linux command)
+`--noout` parameter logonly no output displayed (avoid tee process)
 
 as a lib, in a bash script, just put :
 ```
