@@ -42,7 +42,7 @@ the log file will be automatically rotated when exceeding `maxsize`, keeping `nr
 * logrotate command
 * awk command with strftime()/fflush() functions (gawk/mawk)
 
-## example
+## examples
 
 the `autologsh` script can be used to timestamp+log directly a command:
 ```
@@ -58,6 +58,11 @@ autologsh ping -c 3 172.26.48.140
 ```
 log saved in `~/.autolog/ping.log`, use `logfile=<logfile> autologsh <command>` to change log file destination.  
 use `autologsh --nolog <command>` to have just timestamped output without logging into a file. (like `ts` command)
+
+```
+maxsize=10M nrotate=3 logfile=~/app/ping.log nohup autologsh ping 172.26.48.140 >/dev/null 2>&1 </dev/null &
+```
+inifinite ping with automatic log rotation to prevent infinite growth of log file
 
 Using autologsh a lib in a shell script:
 ```shell
