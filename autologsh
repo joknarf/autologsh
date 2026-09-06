@@ -14,6 +14,7 @@ with vars default:
 }
 
 _log_rotate() {
+    export PATH=$PATH:/usr/sbin
     cat - <<EOF >"$logconf"
 $logfile {
     maxsize $maxsize
@@ -43,7 +44,7 @@ _log_ts_rot() {
 
 _log_out() {
     if ((log));then
-        if [ -t 1 ]
+        if ((out))
         then _log_ts_rot |tee -a "$logfile" 
         else _log_ts_rot >>"$logfile"
         fi
@@ -53,8 +54,9 @@ _log_out() {
 
 function do_log {
     typeset logdir logfile="$logfile" timeformat="${timeformat:-[%Y-%m-%d %H:%M:%S]}" cmd log=1
-    typeset maxsize="${maxsize:-5M}" maxs nrotate="${nrotate:-4}" logconf
+    typeset maxsize="${maxsize:-5M}" maxs nrotate="${nrotate:-4}" logconf out=1
     [ "$1" = --nolog ] && log=0 && shift
+    [ "$1" = --noout ] && out=0 && shift
     ((log)) && {
         [ "$1" ] && [ "$1" != '-' ] && : ${logfile:=~/.autolog/"$1".log}
         : ${logfile:=~/.autolog/"${0##*/}".log}
