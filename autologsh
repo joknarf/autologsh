@@ -55,9 +55,9 @@ function do_log {
         [ "$1" ] && [ "$1" != '-' ] && : ${logfile:=~/.autolog/"$1".log}
         : ${logfile:=~/.autolog/"${0##*/}".log}
         touch "$logfile" || return 1
-        logfile=$(realpath "$logfile")
         logdir="${logfile%/*}"
         mkdir -p "$logdir" || return 1
+        [[ $logfile = /* ]] || logfile="$(cd $logdir;pwd -P)/${logfile##*/}"
         logconf="${logdir}/.${logfile##*/}.conf"
         _log_rotate
         echo '---------------------------------' >>"$logfile"
