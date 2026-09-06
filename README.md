@@ -61,7 +61,7 @@ log saved in `~/.autolog/ping.log`, use `logfile=<logfile> autologsh <command>` 
 use `autologsh --nolog <command>` to have just timestamped output without logging into a file. (like `ts` command)
 
 ```
-maxsize=10M nrotate=3 logfile=~/app/ping.log nohup autologsh ping 172.26.48.140 >/dev/null 2>&1 </dev/null &
+maxsize=10M nrotate=3 logfile=~/app/ping.log nohup autologsh --noout ping 172.26.48.140 >/dev/null 2>&1 </dev/null &
 ```
 inifinite ping with automatic log rotation to prevent infinite growth of log file
 
