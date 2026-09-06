@@ -37,10 +37,13 @@ _log_ts() {
 
 _log_ts_rot() {
     typeset size=$(stat -c '%s' "$logfile")
-    awk -f <(printf '%s' '
+    awk -f <(printf '%s\n%s' "
+         BEGIN{
+             tf=\"$timeformat\";lc=\"$logconf\";s=$size;m=$maxs
+         }" '
          { o=strftime(tf)" "$0;print o;fflush();s+=length(o)+1 }
          s>m{s=0;system("logrotate -s "lc".s "lc" &")}
-    ') tf="$timeformat" lc="$logconf" s=$size m=$maxs
+    ')
 }
 
 _log_out() {
